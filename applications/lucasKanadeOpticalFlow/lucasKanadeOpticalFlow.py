@@ -91,3 +91,6 @@ while(1):
     # Now update the previous frame and previous points
     old_gray = frame_gray.copy()
     old_points = good_new.reshape(-1,1,2)
+
+cap.release()
+out.release()
