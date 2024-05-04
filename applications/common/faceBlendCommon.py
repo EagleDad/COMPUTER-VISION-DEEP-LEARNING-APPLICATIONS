@@ -14,7 +14,7 @@ def getEightBoundaryPoints(h, w):
   boundaryPts.append((w/2, h-1))
   boundaryPts.append((0, h-1))
   boundaryPts.append((0, h/2))
-  return np.array(boundaryPts, dtype=np.float)
+  return np.array(boundaryPts, dtype=np.float32)
 
 
 # Constrains points to be inside boundary
