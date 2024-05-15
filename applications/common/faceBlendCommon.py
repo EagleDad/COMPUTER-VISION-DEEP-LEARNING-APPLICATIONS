@@ -271,3 +271,46 @@ def warpImage(imIn, pointsIn, pointsOut, delaunayTri):
     # Warp pixels inside input triangle to output triangle.
     warpTriangle(imIn, imOut, tin, tout)
   return imOut
+
+# Warps an image in a piecewise affine manner.
+# The warp is defined by the movement of landmark points specified by pointsIn
+# to a new location specified by pointsOut. The triangulation beween points is specified
+# by their indices in delaunayTri.
+def warpImage(imIn, imOut, pointsIn, pointsOut, delaunayTri, useOutputImageSize=False):
+  h, w, ch = imIn.shape
+
+  # Output image
+  if not useOutputImageSize:
+    imOut = np.zeros(imIn.shape, dtype=imIn.dtype)
+
+  # Warp each input triangle to output triangle.
+  # The triangulation is specified by delaunayTri
+  for j in range(0, len(delaunayTri)):
+    # Input and output points corresponding to jth triangle
+    tin = []
+    tout = []
+
+    for k in range(0, 3):
+      # Extract a vertex of input triangle
+      pIn = pointsIn[delaunayTri[j][k]]
+      # Make sure the vertex is inside the image
+      pIn = constrainPoint(pIn, w, h)
+
+      # Extract a vertex of the output triangle
+      pOut = pointsOut[delaunayTri[j][k]]
+
+      # Make sure the vertex is inside the image
+      if useOutputImageSize:
+        pOut = constrainPoint(pOut, imOut.shape[1], imOut.shape[0])
+      else:
+        pOut = constrainPoint(pOut, w, h)
+
+      # Push the input vertex into input triangle
+      tin.append(pIn)
+      # Push the output vertex into output triangle
+      tout.append(pOut)
+
+    # Warp pixels inside input triangle to output triangle.
+    warpTriangle(imIn, imOut, tin, tout)
+  return imOut
+
