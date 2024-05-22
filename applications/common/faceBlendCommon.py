@@ -91,6 +91,31 @@ def normalizeImagesAndLandmarks(outSize, imIn, pointsIn):
 
   return imOut, pointsOut
 
+def alignFace(imIn, faceRect, landmarkDetector, outSize):
+    # Corners of the eye in input image
+    (w, h) = outSize
+    landmarks = landmarkDetector(cv2.cvtColor(imIn, cv2.COLOR_BGR2RGB), faceRect)
+    pointsIn = np.array(dlibLandmarksToPoints(landmarks))
+
+    eyecornerSrc = [pointsIn[2], pointsIn[0]]
+
+    # Corners of the eye in normalized image
+    eyecornerDst = [(np.int32(0.2 * w), np.int32(h/3)),
+                  (np.int32(0.8 * w), np.int32(h/3))]
+
+    # Calculate similarity transform
+    tform = similarityTransform(eyecornerSrc, eyecornerDst)
+
+    imIn = np.float32(imIn)/255.0
+    imOut = np.zeros(imIn.shape, dtype=imIn.dtype)
+
+    # Apply similarity transform to input image
+    imOut = cv2.warpAffine(imIn, tform, outSize)
+
+    imOut = np.uint8(imOut*255)
+
+    return imOut
+
 # find the point closest to an array of points
 # pointsArray is a Nx2 and point is 1x2 ndarray
 def findIndex(pointsArray, point):
