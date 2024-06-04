@@ -15,7 +15,7 @@ def index():
    return render_template('index.html')
 
 # Load Digit Recogniztion model
-net = cv2.dnn.readNetFromONNX('C:/Users/dirk.adler/source/repos/COMPUTER-VISION-DEEP-LEARNING-APPLICATIONS/applications/digitRecognizerWebApp/model.onnx')
+net = cv2.dnn.readNetFromONNX('model.onnx')
 
 # Implements softmax function
 def softmax(x):
