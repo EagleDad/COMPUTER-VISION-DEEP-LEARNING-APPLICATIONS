@@ -205,7 +205,6 @@ def edgesDeriche():
 #
 # MAIN FUNCTION
 #
-
 ym1 = 11
 yo = 24
 yp1 = 22
@@ -234,10 +233,14 @@ plt.legend()
 plt.show()
 
 #http://www.learnpiv.org/subPixel/
+#Gaus fit
+denomGauss = 2.0 * ( np.log(ym1) + np.log(yp1) - 2 * np.log(yo))
+correctionGauss = (np.log(ym1) - np.log(yp1)) / denomGauss
 
-denom = 2.0 * ( np.log(ym1) + np.log(yp1) - 2 * np.log(yo))
+denomLinear = 2 * ( ym1 - 2.0 * yo + yp1)
+correctionLinear = ( ym1 - yp1) / denomLinear
 
-correction = (np.log(ym1) - np.log(yp1)) / denom
+# Linear fit
 
 
 
